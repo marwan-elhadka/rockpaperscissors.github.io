@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+   <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #333; /* Dark grey background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+     
+      .container {
+        max-width: 600px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+     
+      h1 {
+        margin-bottom: 30px;
+        font-size: 36px;
+        color: #333;
+      }
+     
+      .boxes {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+      }
+     
+      .box {
+        width: 100px;
+        height: 100px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 36px;
+      }
+     
+      .buttons {
+        display: flex;
+        justify-content: center;
+      }
+     
+      .buttons button {
+        padding: 10px 20px;
+        margin: 0 10px;
+        font-size: 18px;
+        border: 2px solid #ff0000; /* Border color */
+        border-radius: 5px;
+        background-color: #ff0000; /* Transparent background */
+        color: #ffffff; /* Text color */
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+      }
+     
+      .buttons button:hover {
+        background-color: #b90000; /* Background color on hover */
+        color: #000; /* Text color on hover */
+      }
+     
+     
+      #result {
+        margin-top: 20px;
+        font-size: 24px;
+        color: #333;
+      }
+     
+      #figure {
+        font-size: 36px;
+        margin-top: 20px;
+        position: absolute;
+      }
+    </style>    
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock, Paper, Scissors</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Rock, Paper, Scissors</h1>
+    <div id="result"></div>
+    <div class="boxes">
+      <div class="box" id="rock-box">
+        <div class="symbol">👊🏻</div>
+      </div>
+      <div class="box" id="paper-box">
+        <div class="symbol">✋🏻</div>
+      </div>
+      <div class="box" id="scissors-box">
+        <div class="symbol">✌🏻</div>
+      </div>
+    </div>
+    <div class="buttons">
+      <button id="rock" onclick="animateSelection('rock')">Rock</button>
+      <button id="paper" onclick="animateSelection('paper')">Paper</button>
+      <button id="scissors" onclick="animateSelection('scissors')">Scissors</button>
+    </div>
+    <div id="figure"></div>
+  </div>
+  <script>const options = ["rock", "paper", "scissors"];
+    const figures = {
+      rock: "👊🏻",
+      paper: "✋🏻",
+      scissors: "✌🏻"
+    };
+   
+    let scorePlayer = 0;
+    let scoreComputer = 0;
+   
+    function getComputerChoice() {
+      const randomIndex = Math.floor(Math.random() * options.length);
+      return options[randomIndex];
+    }
+   
+    function playRound(playerSelection, computerSelection) {
+      let result;
+      if (playerSelection === computerSelection) {
+        result = "It's a tie!";
+      } else if (
+        (playerSelection === "rock" && computerSelection === "scissors") ||
+        (playerSelection === "scissors" && computerSelection === "paper") ||
+        (playerSelection === "paper" && computerSelection === "rock")
+      ) {
+        result = `You win! ${figures[playerSelection]} beats ${figures[computerSelection]}`;
+        scorePlayer++;
+      } else {
+        result = `You lose! ${figures[computerSelection]} beats ${figures[playerSelection]}`;
+        scoreComputer++;
+      }
+      document.getElementById("result").innerText = result;
+    }
+   
+    function animateFigure(selection) {
+      const figure = document.getElementById("figure");
+      const symbolEmoji = figures[selection];
+      const symbolElement = document.getElementById(selection + "-box").querySelector(".symbol");
+      symbolElement.innerText = symbolEmoji;
+      figure.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
+      figure.style.top = `${Math.random() * (window.innerHeight - 100)}px`;
+      figure.classList.add("animate");
+      setTimeout(() => {
+        figure.classList.remove("animate");
+      }, 1000); // Adjust this timeout to match the button animation duration
+    }
+   
+    function animateSelection(selection) {
+      animateFigure(selection);
+      playRound(selection, getComputerChoice());
+    }
+   
+    function game() {
+      for (let i = 0; i < 5; i++) {
+        const playerSelection = prompt("Rock, Paper or Scissors?");
+        if (!playerSelection) continue;
+        const choiceInLower = playerSelection.toLowerCase();
+        if (options.includes(choiceInLower)) {
+          animateSelection(choiceInLower);
+        } else {
+          alert("Invalid choice! Please choose Rock, Paper, or Scissors.");
+          i--; // Repeat the loop iteration
+        }
+      }
+      console.log("Game Over");
+      if (scorePlayer > scoreComputer) {
+        console.log("Congrats you win!!");
+      } else if (scorePlayer < scoreComputer) {
+        console.log("Better luck next time.");
+      } else {
+        console.log("It's a tie!");
+      }
+      console.log(`Final score: Player ${scorePlayer} VS Computer ${scoreComputer}`);
+    }
+   
+    game();
+    </script>
+</body>
+</html>
